@@ -1,0 +1,24 @@
+{
+  "name": "josked",
+  "version": "0.1.0",
+  "description": "Check whether your email or password appeared in known data breaches. Static site, no backend, no account.",
+  "type": "module",
+  "private": false,
+  "license": "MIT",
+  "author": "Josked contributors",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test/core.test.mjs"
+  },
+  "keywords": [
+    "breach",
+    "haveibeenpwned",
+    "xposedornot",
+    "password",
+    "security",
+    "osint"
+  ]
+}

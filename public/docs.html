@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://api.xposedornot.com https://passwords.xposedornot.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<title>Josked · Docs</title>
+<meta name="description" content="How Josked works: what is sent, what is stored, the rate limits, the data sources, and how to run your own copy.">
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/globals.css">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/josked.css">
+</head>
+<body>
+<div class="site" id="top">
+  <a class="site-skip" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="site-head-in">
+      <a class="site-brand" href="index.html"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>Josked</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html">Check</a>
+        <a href="breaches.html">Breach gallery</a>
+        <a href="docs.html" aria-current="page">Docs</a>
+      </nav>
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme"></button>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+    <div class="site-wrap">
+      <nav class="site-toc" aria-label="On this page">
+        <b>On this page</b>
+        <a href="#what">What Josked checks</a>
+        <a href="#how">How it works</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#results">Reading results</a>
+        <a href="#limits">Limits and rate limits</a>
+        <a href="#run">Run or host it</a>
+        <a href="#faq">FAQ</a>
+        <a href="#credits">Credits and license</a>
+      </nav>
+
+      <article class="site-prose">
+        <details class="site-toc-m">
+          <summary><svg class="i sm" aria-hidden="true"><use href="#i-list"/></svg>On this page<svg class="i sm" aria-hidden="true"><use href="#i-chevron-down"/></svg></summary>
+          <nav aria-label="On this page">
+            <a href="#what">What Josked checks</a>
+            <a href="#how">How it works</a>
+            <a href="#privacy">Privacy</a>
+            <a href="#results">Reading results</a>
+            <a href="#limits">Limits</a>
+            <a href="#run">Run or host it</a>
+            <a href="#faq">FAQ</a>
+            <a href="#credits">Credits</a>
+          </nav>
+        </details>
+
+        <header class="site-hero">
+          <span class="site-eyebrow"><svg class="i sm" aria-hidden="true"><use href="#i-book"/></svg>Docs</span>
+          <h1>How Josked works</h1>
+          <p class="site-lead">Josked tells you whether your email or password showed up in a known data breach, and which services leaked it. It is a static site: no account, no database and no server of our own.</p>
+          <p class="site-updated">Version 0.1.0</p>
+        </header>
+
+        <section id="what" aria-labelledby="what-h">
+          <h2 id="what-h"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>What Josked checks</h2>
+          <div class="site-cards">
+            <div class="site-card">
+              <span class="bubble-ic"><svg class="i" aria-hidden="true"><use href="#i-mail"/></svg></span>
+              <h3>Email</h3>
+              <span>Lists every breach and paste the address appears in, with the risk level, the data that leaked, and the year.</span>
+            </div>
+            <div class="site-card">
+              <span class="bubble-ic"><svg class="i" aria-hidden="true"><use href="#i-key"/></svg></span>
+              <h3>Password</h3>
+              <span>Counts how often the password appears in breach data. It never gets sent in full.</span>
+            </div>
+            <div class="site-card">
+              <span class="bubble-ic"><svg class="i" aria-hidden="true"><use href="#i-table"/></svg></span>
+              <h3>Breach gallery</h3>
+              <span>Browses the whole database with search, filters and a detail card for each breach.</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="how" aria-labelledby="how-h">
+          <h2 id="how-h"><svg class="i" aria-hidden="true"><use href="#i-zap"/></svg>How it works</h2>
+          <p>Each check is one request made directly from your browser to XposedOrNot, the free breach-lookup service. Josked does not sit in the middle.</p>
+          <ol>
+            <li><b>Email.</b> The address is trimmed and lowercased, then sent in a query string to <code>api.xposedornot.com/v1/breach-analytics</code>. The answer includes breach details, risk and paste counts.</li>
+            <li><b>Password.</b> The password is hashed with Keccak-512 in your browser. Only the first 10 hex characters of that hash go to <code>passwords.xposedornot.com/api/v1/pass/anon/</code>. The answer is a count of breaches whose hashes start with that prefix, and nothing about the password itself.</li>
+            <li><b>Reports.</b> Markdown and PDF are built in your browser from the same result. Nothing is uploaded.</li>
+            <li><b>Gallery.</b> The full breach list comes from <code>api.xposedornot.com/v1/breaches</code>. It is cached for 15 minutes in <code>sessionStorage</code>, which is per tab.</li>
+          </ol>
+          <div class="site-note">
+            <svg class="i" aria-hidden="true"><use href="#i-info"/></svg>
+            <div><p>The password endpoint matches a 10-character hash prefix, so a count can include a few passwords that happen to share it. Treat it as a strong signal, not a certificate.</p></div>
+          </div>
+        </section>
+
+        <section id="privacy" aria-labelledby="privacy-h">
+          <h2 id="privacy-h"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Privacy</h2>
+          <ul>
+            <li><b>Passwords stay in the page.</b> They are not sent in full, saved to storage, or logged. They live only in the open page's memory.</li>
+            <li><b>No Josked server.</b> Josked has no backend, so it keeps no logs and no database. The site host still sees normal web requests, such as the page you loaded.</li>
+            <li><b>XposedOrNot sees your request.</b> It receives the email or password prefix and your IP address, as with any API call. Read their privacy policy before you use it.</li>
+            <li><b>Results live in memory.</b> A checked email stays in JavaScript memory for 10 minutes so repeat checks are fast. Closing the tab clears it. Use <b>Check again</b> to ask XposedOrNot for live data.</li>
+            <li><b>No referrer.</b> The pages set a <code>no-referrer</code> referrer policy, so XposedOrNot does not receive the page address as a referrer.</li>
+          </ul>
+          <div class="site-note warn">
+            <svg class="i" aria-hidden="true"><use href="#i-warning"/></svg>
+            <div><p>Only check an address you own or are allowed to check. Looking up other people's addresses can be harmful, and it is not what Josked is for.</p></div>
+          </div>
+        </section>
+
+        <section id="results" aria-labelledby="results-h">
+          <h2 id="results-h"><svg class="i" aria-hidden="true"><use href="#i-bar-chart"/></svg>Reading results</h2>
+          <div class="site-table">
+            <table>
+              <thead><tr><th>Field</th><th>Meaning</th></tr></thead>
+              <tbody>
+                <tr><td>Risk level</td><td>The risk label XposedOrNot returns for the email. Critical or High is shown in red.</td></tr>
+                <tr><td>Plain-text leaks</td><td>Breaches where passwords were stored without protection. Change any password you used on those services.</td></tr>
+                <tr><td>Verified</td><td>XposedOrNot marks this breach as verified.</td></tr>
+                <tr><td>Sensitive</td><td>XposedOrNot flags this breach as sensitive. The gallery lets you filter for these.</td></tr>
+                <tr><td>Pastes</td><td>Public text dumps that contained the address. They often hold username and password lists, so change the password if you used it.</td></tr>
+                <tr><td>Strong hash</td><td>Passwords were stored with a slow hash. Still change a password you reused, because hashes can be cracked.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="limits" aria-labelledby="limits-h">
+          <h2 id="limits-h"><svg class="i" aria-hidden="true"><use href="#i-gauge"/></svg>Limits and rate limits</h2>
+          <ul>
+            <li><b>One request about every 1.1 seconds</b> per page, which matches XposedOrNot's free tier of about one request per second.</li>
+            <li><b>Results are cached</b> in memory for 10 minutes per email or password prefix, so repeat checks cost no requests. <b>Check again</b> always asks for fresh data.</li>
+            <li><b>The breach list is cached</b> for 15 minutes per tab. The gallery shows when it was updated, and <b>Refresh</b> loads the latest list at once.</li>
+            <li><b>Quotas are probably per visitor.</b> Each browser calls XposedOrNot directly, so the limits most likely apply per IP address rather than to one shared server.</li>
+            <li><b>No unlimited promise.</b> XposedOrNot can add hourly or daily caps to its free tier. If you see “limiting requests”, wait a minute and try again.</li>
+          </ul>
+        </section>
+
+        <section id="run" aria-labelledby="run-h">
+          <h2 id="run-h"><svg class="i" aria-hidden="true"><use href="#i-cpu"/></svg>Run or host it</h2>
+          <p>Josked needs no build step. Its libraries are vendored in <code>public/vendor/</code>, so nothing is installed. Serve the <code>public/</code> folder with any static host.</p>
+          <div class="site-note">
+            <svg class="i" aria-hidden="true"><use href="#i-info"/></svg>
+            <div><p>Browsers refuse ES modules opened from <code>file://</code>, so double-clicking <code>index.html</code> will not work. Use one of the options below.</p></div>
+          </div>
+          <h3>Locally</h3>
+          <p>With Node 18 or newer, run <code>npm start</code> from the project folder and open <code>http://localhost:4173</code>. Python also works: <code>python -m http.server 4173 --directory public</code>.</p>
+          <h3>Hosting</h3>
+          <p>Any static host works, such as GitHub Pages, Netlify, Cloudflare Pages or Vercel static. Upload the <code>public/</code> folder. No environment variables are needed.</p>
+          <h3>Tests</h3>
+          <p>Run <code>npm test</code> for the parsing, rate-limiting and password-prefix tests.</p>
+        </section>
+
+        <section id="faq" aria-labelledby="faq-h">
+          <h2 id="faq-h"><svg class="i" aria-hidden="true"><use href="#i-sparkles"/></svg>FAQ</h2>
+          <div class="doc-place">
+            <h3>Is it free?</h3>
+            <p>Yes. Josked is MIT licensed, and XposedOrNot's free API needs no key.</p>
+          </div>
+          <div class="doc-place">
+            <h3>Does Josked store my email or password?</h3>
+            <p>No. There is no database. Results live in memory and disappear when you close the tab.</p>
+          </div>
+          <div class="doc-place">
+            <h3>Why does the password check send a prefix?</h3>
+            <p>That is k-anonymity. XposedOrNot only sees 10 characters of a hash, so it cannot learn the password. The same idea powers Have I Been Pwned's range API.</p>
+          </div>
+          <div class="doc-place">
+            <h3>Why is my result “not found”?</h3>
+            <p>XposedOrNot only knows the breaches it has collected. A clean result means it is not in their data, not that the account is safe.</p>
+          </div>
+          <div class="doc-place">
+            <h3>Can I check a whole domain?</h3>
+            <p>Not in this version. XposedOrNot's domain lookups need a Plus API key, and a key must stay secret, which a static site cannot do.</p>
+          </div>
+        </section>
+
+        <section id="credits" aria-labelledby="credits-h">
+          <h2 id="credits-h"><svg class="i" aria-hidden="true"><use href="#i-users"/></svg>Credits and license</h2>
+          <ul>
+            <li><b>Breach data, logos and risk scores:</b> <a href="https://xposedornot.com" target="_blank" rel="noopener noreferrer">XposedOrNot</a>. Its API is documented at <a href="https://github.com/XposedOrNot/XposedOrNot-JS" target="_blank" rel="noopener noreferrer">XposedOrNot-JS</a>.</li>
+            <li><b>Hashing:</b> <a href="https://github.com/emn178/js-sha3" target="_blank" rel="noopener noreferrer">js-sha3</a> 0.9.3 (MIT), vendored in <code>public/vendor/</code>.</li>
+            <li><b>PDF reports:</b> <a href="https://github.com/parallax/jsPDF" target="_blank" rel="noopener noreferrer">jsPDF</a> 2.5.2 and <a href="https://github.com/simonbengtsson/jsPDF-AutoTable" target="_blank" rel="noopener noreferrer">jspdf-autotable</a> 3.8.4 (both MIT), vendored in <code>public/vendor/</code>.</li>
+            <li><b>Look and feel:</b> the design tokens, layout and icon style come from AlgoWorld.</li>
+            <li><b>License:</b> Josked is released under the MIT License. See <code>LICENSE</code>.</li>
+          </ul>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>MIT licensed · Breach data from <a href="https://xposedornot.com" target="_blank" rel="noopener noreferrer">XposedOrNot</a></span>
+    <span>Josked is not affiliated with XposedOrNot.</span>
+  </footer>
+</div>
+
+<script type="module" src="js/docs.js"></script>
+</body>
+</html>

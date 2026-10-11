@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://api.xposedornot.com https://passwords.xposedornot.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<title>Josked · Have you been hacked?</title>
+<meta name="description" content="Check if your email or password appeared in known data breaches. Free, no account, and your password never leaves your browser.">
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/globals.css">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/josked.css">
+</head>
+<body>
+<div class="site" id="top">
+  <a class="site-skip" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="site-head-in">
+      <a class="site-brand" href="index.html"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>Josked</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" aria-current="page">Check</a>
+        <a href="breaches.html">Breach gallery</a>
+        <a href="docs.html">Docs</a>
+      </nav>
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme"></button>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+    <div class="site-wrap solo">
+      <article class="site-prose">
+        <header class="site-hero">
+          <span class="site-eyebrow"><svg class="i sm" aria-hidden="true"><use href="#i-shield"/></svg>Free · No account · No backend</span>
+          <h1>Have you been hacked?</h1>
+          <p class="site-lead">Check whether your email or password appeared in known data breaches, and find out which services leaked it. Powered by XposedOrNot.</p>
+        </header>
+
+        <section class="j-panel" aria-label="Check">
+          <div class="pills j-tabs" role="tablist" aria-label="What to check">
+            <button class="pill" type="button" role="tab" data-tab="email" aria-controls="email-form">
+              <svg class="i sm" aria-hidden="true"><use href="#i-mail"/></svg>Email
+            </button>
+            <button class="pill" type="button" role="tab" data-tab="password" aria-controls="pass-form">
+              <svg class="i sm" aria-hidden="true"><use href="#i-key"/></svg>Password
+            </button>
+          </div>
+
+          <form class="j-form" id="email-form" data-panel="email" autocomplete="off" novalidate>
+            <label class="field"><span>Email address</span>
+              <div class="input-wrap">
+                <svg class="i" aria-hidden="true"><use href="#i-mail"/></svg>
+                <input class="input" id="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required maxlength="254">
+              </div>
+            </label>
+            <div class="j-actions">
+              <button class="btn primary" type="submit"><svg class="i sm" aria-hidden="true"><use href="#i-search"/></svg>Check email</button>
+            </div>
+            <p class="j-fine muted">Only check an address you own or are allowed to check. The request goes straight from your browser to XposedOrNot.</p>
+          </form>
+
+          <form class="j-form" id="pass-form" data-panel="password" hidden autocomplete="off">
+            <label class="field"><span>Password</span>
+              <div class="input-wrap j-pass">
+                <svg class="i" aria-hidden="true"><use href="#i-key"/></svg>
+                <input class="input" id="password" type="password" autocomplete="new-password" spellcheck="false" autocapitalize="off" placeholder="Type a password" maxlength="256">
+                <button class="icon-btn j-eye" id="eye" type="button" aria-label="Show password"><svg class="i" aria-hidden="true"><use href="#i-eye"/></svg></button>
+              </div>
+            </label>
+            <div class="j-meter" id="meter" data-s="0" aria-hidden="true"><i></i></div>
+            <p class="j-fine muted" id="meter-label" aria-live="polite"></p>
+            <div class="j-actions">
+              <button class="btn primary" type="submit"><svg class="i sm" aria-hidden="true"><use href="#i-search"/></svg>Check password</button>
+            </div>
+            <p class="j-fine muted">Hashed in your browser with Keccak-512. Only a 10-character prefix is sent, so the password itself never leaves this page.</p>
+          </form>
+        </section>
+
+        <section id="results" class="j-results" aria-live="polite"></section>
+
+        <section class="site-cards" aria-label="More">
+          <a class="site-card" href="breaches.html">
+            <span class="bubble-ic"><svg class="i" aria-hidden="true"><use href="#i-table"/></svg></span>
+            <h3>Breach gallery</h3>
+            <span>Browse every breach in the database, filter by verified or plain-text passwords, and see what each one exposed.</span>
+          </a>
+          <a class="site-card" href="docs.html">
+            <span class="bubble-ic"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span>
+            <h3>How it works</h3>
+            <span>What is sent, what is stored, the rate limits, and how to host your own copy.</span>
+          </a>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="site-foot">
+    <span>MIT licensed · Breach data from <a href="https://xposedornot.com" target="_blank" rel="noopener noreferrer">XposedOrNot</a></span>
+    <span>Josked is not affiliated with XposedOrNot.</span>
+  </footer>
+</div>
+
+<script src="vendor/sha3.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/jspdf.plugin.autotable.min.js"></script>
+<script type="module" src="js/check.js"></script>
+</body>
+</html>

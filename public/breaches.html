@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https://api.xposedornot.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<title>Josked · Breach gallery</title>
+<meta name="description" content="Every breach in the XposedOrNot database, with search, filters and details for each one.">
+<link rel="icon" href="img/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/globals.css">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/josked.css">
+</head>
+<body>
+<div class="site" id="top">
+  <a class="site-skip" href="#main">Skip to content</a>
+
+  <header class="site-head">
+    <div class="site-head-in">
+      <a class="site-brand" href="index.html"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>Josked</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html">Check</a>
+        <a href="breaches.html" aria-current="page">Breach gallery</a>
+        <a href="docs.html">Docs</a>
+      </nav>
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch theme"></button>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+    <div class="site-wrap solo wide">
+      <article class="site-prose">
+        <header class="site-hero">
+          <span class="site-eyebrow"><svg class="i sm" aria-hidden="true"><use href="#i-table"/></svg>Gallery</span>
+          <h1>Breach gallery</h1>
+          <p class="site-lead">Every breach in the XposedOrNot database. Search by service, domain, industry or exposed data, then open a card for the details.</p>
+        </header>
+
+        <div class="j-stats" id="stats" aria-live="polite"></div>
+
+        <div class="j-asof">
+          <span class="muted small" id="asof" aria-live="polite">Loading…</span>
+          <button class="btn sm" type="button" id="refresh">
+            <svg class="i sm" aria-hidden="true"><use href="#i-refresh"/></svg>Refresh
+          </button>
+        </div>
+
+        <div class="j-gal-toolbar">
+          <div class="input-wrap">
+            <svg class="i" aria-hidden="true"><use href="#i-search"/></svg>
+            <input class="input" id="search" type="search" placeholder="Search services, domains or exposed data" aria-label="Search breaches" autocomplete="off">
+          </div>
+          <div class="j-gal-row">
+            <div class="pills" role="group" aria-label="Filter">
+              <button class="pill sm" type="button" data-filter="all" aria-pressed="true">All</button>
+              <button class="pill sm" type="button" data-filter="verified" aria-pressed="false">Verified</button>
+              <button class="pill sm" type="button" data-filter="sensitive" aria-pressed="false">Sensitive</button>
+              <button class="pill sm" type="button" data-filter="plaintext" aria-pressed="false">Plain-text passwords</button>
+            </div>
+            <label class="j-sort"><span class="muted">Sort</span>
+              <select class="select sm" id="sort" aria-label="Sort breaches">
+                <option value="newest">Newest added</option>
+                <option value="largest">Most records</option>
+                <option value="oldest">Oldest breach</option>
+                <option value="name">Name A–Z</option>
+              </select>
+            </label>
+          </div>
+          <p class="muted small" id="count" aria-live="polite"></p>
+        </div>
+
+        <section id="grid" class="j-gal-grid" aria-live="polite"></section>
+        <div class="j-load"><button class="btn" type="button" id="more" hidden></button></div>
+      </article>
+    </div>
+  </main>
+
+  <dialog class="j-dialog" id="detail" aria-labelledby="detail-title">
+    <button class="icon-btn j-dialog-close" type="button" id="detail-close" aria-label="Close details">
+      <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
+    </button>
+    <div class="j-dialog-body" id="detail-body"></div>
+  </dialog>
+
+  <footer class="site-foot">
+    <span>MIT licensed · Breach data from <a href="https://xposedornot.com" target="_blank" rel="noopener noreferrer">XposedOrNot</a></span>
+    <span>Josked is not affiliated with XposedOrNot.</span>
+  </footer>
+</div>
+
+<script type="module" src="js/breaches.js"></script>
+</body>
+</html>
